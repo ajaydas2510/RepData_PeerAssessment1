@@ -1,17 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
-```{r setup, echo=FALSE}
-  library(knitr)
-  wd ='C:\\Ajay\\coursera\\Data Science Specialization\\Reproducible Research\\Assgn1'
-  opts_knit$set(root.dir=wd)
-```
+
 ## Loading and preprocessing the data
-```{r}
+
+```r
 ##Part 1
 #check existence of source data file in working directory
 lf<-dir()
@@ -25,21 +17,27 @@ df.src$date = as.Date(df.src$date)
 df.1<-df.src[complete.cases(df.src),]
 ```
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 #for 'steps taken per day', plot a histogram; 
 df.1_sum<-aggregate(steps~date, data = df.1,sum)
 hist(df.1_sum$steps,xlab="Steps taken per day",
      main="Histogram of steps taken per day")
+```
 
+![plot of chunk unnamed-chunk-2](./PA1_template_files/figure-html/unnamed-chunk-2.png) 
+
+```r
 # Report mean and median values of steps taken per day
 mean_by_day = as.character(mean(df.1_sum$steps))
 median_by_day = as.character(median(df.1_sum$steps))
 ```
-* Mean value of 'Total steps per day' is `r mean_by_day`.  
-* Median value of 'Total steps per day' is `r median_by_day`.
+* Mean value of 'Total steps per day' is 10766.1886792453.  
+* Median value of 'Total steps per day' is 10765.
 
 ## What is the average daily activity pattern?
-```{r}
+
+```r
 #average steps per interval, displayed as time series plot
 df.1_ave<- aggregate(steps~interval,data=df.1,mean)
 #interval with max average steps
@@ -53,14 +51,17 @@ plot(steps~interval,data=df.1_ave,type="l",xaxt="n",
 at = df.1_ave$interval[seq(1,length(df.1_ave$interval),12)]
 axis(1, at=at, format(as.character(strptime(at,"%H%M"),"%H:%M")),cex.axis = .7)
 ```
+
+![plot of chunk unnamed-chunk-3](./PA1_template_files/figure-html/unnamed-chunk-3.png) 
   
-* Interval with max 'Average steps per day' = `r max_interval`.
+* Interval with max 'Average steps per day' = 08:35.
 
 ## Imputing missing values
 + Missing values are replaced with average value of steps for same time-interval.
 + Values are rounded using as.integer() function.
 + Data frame df.2 below is a copy of source data with missining values filled.
-```{r}
+
+```r
 no_of_na_rows = nrow(df.src) - nrow(df.1)
 df.2 = df.src
 #replace NA values in df.2 with average for same interval
@@ -79,15 +80,18 @@ median2_by_day = as.character(median(df.2_sum$steps))
 hist(df.2_sum$steps,xlab="Steps taken per day with missing data filled",
      main="Histogram of steps taken per day")
 ```
+
+![plot of chunk unnamed-chunk-4](./PA1_template_files/figure-html/unnamed-chunk-4.png) 
   
-* Total no of missing values = `r no_of_na_rows`.
-* Mean value of steps per day (with missing data filled) = `r mean2_by_day`.
-* Median value of steps per day (with missing data filled) = `r median2_by_day`.
-* Mean and median values with missing data as.is = `r mean_by_day`, `r median_by_day`.
+* Total no of missing values = 2304.
+* Mean value of steps per day (with missing data filled) = 10749.7704918033.
+* Median value of steps per day (with missing data filled) = 10641.
+* Mean and median values with missing data as.is = 10766.1886792453, 10765.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 #Analyse data by weekday/weekend split
 df.2$wd = weekdays(df.2$date)
 df.2$wd = sub("Monday|Tuesday|Wednesday|Thursday|Friday","weekday",df.2$wd)
@@ -109,5 +113,7 @@ df.2_ave$interval=formatC(df.1_ave$interval,width=4,format="d",flag="0")
 at = df.2_ave$interval[seq(1,length(df.2_ave$interval),12)]
 axis(1, at=at, format(as.character(strptime(at,"%H%M"),"%H:%M")),cex.axis = .7)
 ```
+
+![plot of chunk unnamed-chunk-5](./PA1_template_files/figure-html/unnamed-chunk-5.png) 
   
 +End of document.
