@@ -10,7 +10,7 @@ output:
   wd ='C:\\Ajay\\coursera\\Data Science Specialization\\Reproducible Research\\Assgn1\\'
   opts_knit$set(root.dir=wd)
 ```
-## Loading and preprocessing the data
+## Loading and pre-processing the data
 ```{r}
 ##Part 1
 #check existence of source data file in working directory
